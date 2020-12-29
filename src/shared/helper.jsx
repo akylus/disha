@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { setUser } from '../redux/user/user-actions';
+import { setUser } from '../redux/user/userActions';
 import { setPosts } from '../redux/posts/posts-actions';
 import { database } from '../firebase/firebase.utils';
 

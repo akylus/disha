@@ -27,7 +27,7 @@ import Grid from '@material-ui/core/Grid';
 import {auth} from '../../firebase/firebase.utils';
 import { connect } from "react-redux";
 
-import { setUser } from './../../redux/user/user-actions';
+import { setUser } from './../../redux/user/userActions';
 
 
 const getdrawerWidth = () => {     

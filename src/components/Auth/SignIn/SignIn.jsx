@@ -13,7 +13,7 @@ import FormLabel from '@material-ui/core/FormLabel';
 import Container from '@material-ui/core/Container';
 import { connect } from 'react-redux';
 import { setIsNewUser } from '../../../redux/signup/isNewUser-actions';  
-import { setUser } from '../../../redux/user/user-actions';
+import { setUser } from '../../../redux/user/userActions';
 import Logo from '../../Logo/Logo';
 
 import { 

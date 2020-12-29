@@ -38,3 +38,9 @@ export const DEPARTMENT_CODES = {
 
 export const POST_SCORE_THRESHOLD = 2;
 
+export const COLLECTION = {
+    DSPACES: "d-spaces",
+    POSTS: "posts",
+    REQUESTS: "requests",
+    USERS: "users",
+}

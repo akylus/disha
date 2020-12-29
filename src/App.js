@@ -5,7 +5,7 @@ import HomePage from "./components/HomePage";
 import Navigation from "./navigation/index";
 import { connect } from "react-redux";
 import { auth, createUserProfileDocument } from "./firebase/firebase.utils";
-import { setUser } from "./redux/user/user-actions";
+import { setUser } from "./redux/user/userActions";
 import AdminNavigation from "./navigation/admin-nav";
 
 export class App extends Component {

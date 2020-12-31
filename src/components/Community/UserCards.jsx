@@ -126,7 +126,6 @@ export class UserCards extends Component {
         this.UserFound();
       }
     }
-    debugger;
     if (this.props.searchValue === "" && this.props.filterValues.length < 1) {
       users = completeUsersArray;
     }
@@ -145,8 +144,8 @@ export class UserCards extends Component {
   }
 
   render() {
-    console.log("USERSDATA", this.props.usersData);
     users = this.props.usersData.users;
+    console.log(users)
     return this.props.usersData.usersLoading ? (
       <Container>
         <Row>
@@ -177,8 +176,10 @@ export class UserCards extends Component {
                   <UserCard
                     className="d-space-card"
                     title={user.firstName + " " + user.lastName}
+                    isAlumni={user.isAlumni}
+                    department={user.department}
                     // description = { dSpace.description }
-                    key={user.firstName}
+                    key={user.id}
                   />
                 </Link>
               );
@@ -191,7 +192,7 @@ export class UserCards extends Component {
               <br />
               <center>
                 <Typography variant="h6">
-                  if you have your friends contact, ask him to register on DISHA
+                  if you have your friends who are missing here, ask them to register on DISHA!
                 </Typography>
               </center>
             </Fragment>

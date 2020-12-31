@@ -28,8 +28,6 @@ export const fetchUsersFailure = (error) => {
 
 export const fetchUsers = () => {
   return (dispatch) => {
-      debugger;
-      console.log("user req")
     dispatch(fetchUsersRequest);
     database
       .collection(COLLECTION.USERS)
@@ -55,9 +53,8 @@ export const fetchUsers = () => {
   };
 };
 
-
 //old
-export const setUser = user => ({
-    type: 'SET_USER',
-    payload: user
-})
+export const setUser = (user) => ({
+  type: "SET_USER",
+  payload: user,
+});

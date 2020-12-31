@@ -4,7 +4,15 @@
     flex-direction: row;
 } */
 
-.user-card-content-display{
-    display: flex; 
-    justify-content: space-evenly;
+.user-card-content-display {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.userName {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+  font-size: 20px !important;
 }

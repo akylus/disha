@@ -2,6 +2,7 @@ import {
   FETCH_USERS_REQUEST,
   FETCH_USERS_SUCCESS,
   FETCH_USERS_FAILURE,
+  SET_USER,
 } from "./userTypes";
 
 const INITIAL_STATE = {
@@ -33,7 +34,7 @@ const userReducer = (state = INITIAL_STATE, action) => {
         users: [],
         usersError: action.payload,
       };
-    case "SET_USER":
+    case SET_USER:
       return {
         ...state,
         user: action.payload,

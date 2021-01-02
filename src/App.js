@@ -1,12 +1,10 @@
 import React, { Component } from "react";
-import { Redirect } from "react-router-dom";
-import Layout from "./components/Layout";
-import HomePage from "./components/HomePage";
-import Navigation from "./navigation/index";
 import { connect } from "react-redux";
+import Layout from "./components/Layout";
 import { auth, createUserProfileDocument } from "./firebase/firebase.utils";
-import { setUser } from "./redux/user/userActions";
 import AdminNavigation from "./navigation/admin-nav";
+import Navigation from "./navigation/index";
+import { setUser } from "./redux/user/userActions";
 
 export class App extends Component {
   constructor(props) {
@@ -22,7 +20,7 @@ export class App extends Component {
 
   setUserId() {
     localStorage.setItem("currentUserId", this.state.currentUser.id);
-    this.props.setUser(this.state.currentUser.id);
+    this.props.setUser(this.state.currentUser);
     let domain = this.state.currentUser.email.split("@")[1].toLowerCase();
     if (domain === "disha.website") {
       this.setState({ admin: true });
@@ -50,7 +48,6 @@ export class App extends Component {
                 : this.props.setUser(null);
             }
           );
-          //console.log(this.state)
         });
         // }
         // else if(this.props.isNewUser === true){
@@ -75,7 +72,6 @@ export class App extends Component {
     this.setState({ currentUser: null });
     this.props.setUser(null);
     localStorage.removeItem("currentUserId");
-    // console.log(this.props.user)
   }
 
   render() {

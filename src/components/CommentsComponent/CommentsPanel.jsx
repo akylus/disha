@@ -1,14 +1,12 @@
-import React, { Component } from "react";
+import { Card, FormControl, Input } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
-import Snackbar, { SnackbarOrigin } from "@material-ui/core/Snackbar";
-import MuiAlert, { AlertProps } from "@material-ui/lab/Alert"; 
-import './styles.css'; 
-import { FormControl, InputLabel, Input, Card } from "@material-ui/core"; 
-import { database } from '../../firebase/firebase.utils'; 
-import { connect } from 'react-redux';  
-import { onCommentPosted } from '../../redux/comments/comments-action'; 
-import { makeStyles } from '@material-ui/core/styles';
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
+import React, { Component } from "react";
+import { connect } from 'react-redux';
+import { database } from '../../firebase/firebase.utils';
+import { onCommentPosted } from '../../redux/comments/comments-action';
+import './styles.css';
 // import Alert from '@material-ui/lab/Alert';
 
 

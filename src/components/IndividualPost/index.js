@@ -1,17 +1,12 @@
-import React, { Component, Fragment } from "react";
-import { Container, Col, Row } from "react-bootstrap";
-import { Redirect } from 'react-router-dom'; 
-
-import firebase from 'firebase/app';
-import 'firebase/firestore';
+import { Card, CircularProgress } from "@material-ui/core";
 import 'firebase/auth';
-
-import { Typography, Divider, Grid, CircularProgress, Card } from "@material-ui/core";
+import 'firebase/firestore';
+import React, { Component, Fragment } from "react";
+import { Redirect } from 'react-router-dom';
+import { database } from '../../firebase/firebase.utils';
+import CommentsComponent from "../CommentsComponent";
 import Post from '../Post';
-import {database} from '../../firebase/firebase.utils';
-import CommentsComponent from "../CommentsComponent"; 
 import './styles.css';
-
 
 export class IndividualPost extends Component { 
   
@@ -25,7 +20,7 @@ export class IndividualPost extends Component {
     }
   getPostData(postsData, id) { 
     
-    let query = postsData.where('postUrl', '==', id).get()
+    postsData.where('postUrl', '==', id).get()
     .then(snapshot => { 
       console.log("Snapshots", snapshot);
       if (snapshot.empty) {
@@ -49,7 +44,7 @@ export class IndividualPost extends Component {
     debugger;
     let currentUserId = localStorage.getItem('currentUserId'); 
     if(currentUserId) {
-      let query = database.collection('users').doc(currentUserId).get()
+      database.collection('users').doc(currentUserId).get()
         .then(doc => {
           if (!doc.exists) {
             console.log('No such document!');
@@ -87,7 +82,7 @@ export class IndividualPost extends Component {
           <Post  
             post={this.state.info}
             userLiked={this.state.currentUserInfo.likedPosts.includes(this.state.info.id)}
-            postedByUser={this.state.currentUserInfo.rollNumber == this.state.info.authorRollNumber}
+            postedByUser={this.state.currentUserInfo.rollNumber === this.state.info.authorRollNumber}
             removePost={this.removePost}   
             inIndividualpost={true}
           /> 

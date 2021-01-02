@@ -15,8 +15,6 @@ export class CommentsComponent extends Component {
         }
     }  
     componentDidUpdate(prevProps){ 
-        console.log("Prev Props", prevProps); 
-        console.log("Current Props", this.props);
     }
     getCurrentUserId() {
         var currentUserId = localStorage.getItem('currentUserId');

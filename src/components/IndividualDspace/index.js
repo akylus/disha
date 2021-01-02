@@ -1,18 +1,11 @@
-import React, { Component, Fragment } from "react";
-import { Container, Col, Row } from "react-bootstrap";
-import { Redirect } from 'react-router-dom'; 
-
-import firebase from 'firebase/app';
-import 'firebase/firestore';
+import { CircularProgress } from "@material-ui/core";
 import 'firebase/auth';
-
-import { Typography, Divider, Grid, CircularProgress, Card } from "@material-ui/core";
-import Post from '../Post';
-import {database} from '../../firebase/firebase.utils';
-import CommentsComponent from "../CommentsComponent"; 
-import './styles.css';
+import 'firebase/firestore';
+import React, { Component } from "react";
+import { Redirect } from 'react-router-dom';
+import { database } from '../../firebase/firebase.utils';
 import Dspace from '../Dspace';
-
+import './styles.css';
 
 export class IndividualDspace extends Component { 
   

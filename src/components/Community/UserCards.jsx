@@ -1,13 +1,12 @@
-import React, { Component, Fragment, useEffect } from "react";
-import DspaceCard from "../SearchPage/DspaceCard";
-import { Container, CircularProgress, Typography } from "@material-ui/core";
-import { Row, Col } from "react-bootstrap";
-import "../SearchPage/styles.css";
+import { CircularProgress, Container, Typography } from "@material-ui/core";
+import React, { Component, Fragment } from "react";
+import { Col, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import UserCard from "./UserCard";
+import { fetchUsers } from "../../middleware";
 import { FILTER_TYPES } from "../../shared/constants";
+import "../SearchPage/styles.css";
+import UserCard from "./UserCard";
 import { connect } from "react-redux";
-import { fetchUsers } from "../../redux";
 
 let users = [];
 
@@ -25,7 +24,7 @@ const updateUsersArray = (searchValue, filterValues) => {
     if (filterValues.length)
       return filteredUsers.filter((user) => {
         let userFullName = user.firstName + user.lastName;
-        return userFullName.toLowerCase().includes(searchValue.toLowerCase());
+        let a = userFullName.toLowerCase().includes(searchValue.toLowerCase());
       });
     else
       return completeUsersArray.filter((user) => {
@@ -59,10 +58,10 @@ const checkUserValid = (user, currentUserInfo, filterValues) => {
   filterValues.forEach((value) => {
     switch (value) {
       case FILTER_TYPES.BATCH:
-        isSameBatch = isUserFromSameBatch(user, currentUserInfo);
+        isSameBatch = currentUserInfo.year === user.year;
         break;
       case FILTER_TYPES.DEPARTMENT:
-        isSameDepartment = isUserFromSameDepartment(user, currentUserInfo);
+        isSameDepartment = currentUserInfo.department === user.department;
         break;
       case FILTER_TYPES.SECTION:
         isSameClass = isUserFromSameClass(user, currentUserInfo);
@@ -72,12 +71,6 @@ const checkUserValid = (user, currentUserInfo, filterValues) => {
   return isSameBatch || isSameDepartment || isSameClass;
 };
 
-const isUserFromSameBatch = (user, currentUserInfo) => {
-  return currentUserInfo.year === user.year;
-};
-const isUserFromSameDepartment = (user, currentUserInfo) => {
-  return currentUserInfo.department === user.department;
-};
 const isUserFromSameClass = (user, currentUserInfo) => {
   return (
     currentUserInfo.year === user.year &&
@@ -91,11 +84,27 @@ export class UserCards extends Component {
     this.state = {
       isUserPresent: true,
       usersLoaded: false,
+      error: "",
     };
   }
 
-  componentDidMount() {
-    this.props.fetchUsers();
+  async componentDidMount() {
+    let data;
+    console.log("saaaaa", this.props.user)
+    if (users.length < 1) {
+      data = await fetchUsers();
+      if (data.users) {
+        completeUsersArray = data.users;
+        users = data.users;
+        this.setState({ usersLoaded: true, isUserPresent: true });
+      } else {
+        this.setState({
+          usersLoaded: true,
+          isUserPresent: false,
+          error: data.error,
+        });
+      }
+    }
   }
 
   componentWillUnmount() {
@@ -108,6 +117,7 @@ export class UserCards extends Component {
   }
 
   updateUsers(prevProps) {
+    debugger;
     if (prevProps.searchValue !== this.props.searchValue) {
       users = updateUsersArray(this.props.searchValue, this.props.filterValues);
       searchUsers = users;
@@ -144,9 +154,7 @@ export class UserCards extends Component {
   }
 
   render() {
-    users = this.props.usersData.users;
-    console.log(users)
-    return this.props.usersData.usersLoading ? (
+    return !this.state.usersLoaded ? (
       <Container>
         <Row>
           <Col md={{ span: 6, offset: 3 }}>
@@ -154,7 +162,7 @@ export class UserCards extends Component {
           </Col>
         </Row>
       </Container>
-    ) : this.props.usersData.usersError ? (
+    ) : this.state.error ? (
       <Container>
         <Row>
           <Col md={{ span: 6, offset: 3 }}>
@@ -192,7 +200,8 @@ export class UserCards extends Component {
               <br />
               <center>
                 <Typography variant="h6">
-                  if you have your friends who are missing here, ask them to register on DISHA!
+                  if you have your friends who are missing here, ask them to
+                  register on DISHA!
                 </Typography>
               </center>
             </Fragment>
@@ -205,14 +214,8 @@ export class UserCards extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    usersData: state.user,
+    userData: state.user,
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    fetchUsers: () => dispatch(fetchUsers()),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(UserCards);
+export default connect(mapStateToProps)(UserCards);

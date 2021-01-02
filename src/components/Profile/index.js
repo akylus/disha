@@ -1,20 +1,18 @@
-import React, { Component, Fragment } from "react";
+import { CircularProgress, Divider, Grid, Typography } from "@material-ui/core";
 import Fab from '@material-ui/core/Fab';
-import Post from '../Post';
-import { Container, Col, Row } from "react-bootstrap";
 import Link from '@material-ui/core/Link';
-import EditIcon from '@material-ui/icons/Edit';
-import firebase from 'firebase/app';
-import 'firebase/firestore';
-import 'firebase/auth';
 import Tooltip from '@material-ui/core/Tooltip';
-import { Typography, Divider, Grid, CircularProgress } from "@material-ui/core";
-import ProfileImage from "./ProfileImage";
-import UserInfo from "./UserInfo";
-import UserCommunity from "./UserCommunity";
-import UserPosts from "./UserPosts";
-import { database } from '../../firebase/firebase.utils';
+import EditIcon from '@material-ui/icons/Edit';
+import 'firebase/auth';
+import 'firebase/firestore';
+import React, { Component } from "react";
+import { Col, Container, Row } from "react-bootstrap";
 import { connect } from 'react-redux';
+import { database } from '../../firebase/firebase.utils';
+import ProfileImage from "./ProfileImage";
+import UserCommunity from "./UserCommunity";
+import UserInfo from "./UserInfo";
+import UserPosts from "./UserPosts";
 
 export class Profile extends Component {
 

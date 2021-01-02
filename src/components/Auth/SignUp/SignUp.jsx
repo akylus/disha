@@ -1,40 +1,37 @@
-import React from "react";
-import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
-import Link from "@material-ui/core/Link";
-import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
-import Radio from "@material-ui/core/Radio";
-import RadioGroup from "@material-ui/core/RadioGroup";
-import FormLabel from "@material-ui/core/FormLabel";
-import Container from "@material-ui/core/Container";
-import Logo from "../../Logo/Logo";
-import { database } from "../../../firebase/firebase.utils";
-import { Formik } from "formik";
-import zxcvbn from "zxcvbn";
-
 import {
   FormControl,
-  OutlinedInput,
-  InputLabel,
-  CircularProgress,
-  FormHelperText,
+
+
+
+  FormHelperText, InputLabel, OutlinedInput
 } from "@material-ui/core";
-
+import Button from "@material-ui/core/Button";
+import Checkbox from "@material-ui/core/Checkbox";
+import Container from "@material-ui/core/Container";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import FormLabel from "@material-ui/core/FormLabel";
+import Grid from "@material-ui/core/Grid";
+import Link from "@material-ui/core/Link";
+import Radio from "@material-ui/core/Radio";
+import RadioGroup from "@material-ui/core/RadioGroup";
+import Typography from "@material-ui/core/Typography";
+import { Formik } from "formik";
+import React from "react";
 import { Redirect } from "react-router-dom";
-
-import {
-  ROLL_NUMBER_CONFIG,
-  DEPARTMENT_CODES,
-} from "../../../shared/constants";
-
-import "./SignUp.css";
+import zxcvbn from "zxcvbn";
 import {
   auth,
-  createUserProfileDocument,
+  createUserProfileDocument, database
 } from "../../../firebase/firebase.utils";
+import {
+  DEPARTMENT_CODES, ROLL_NUMBER_CONFIG
+} from "../../../shared/constants";
+import Logo from "../../Logo/Logo";
+import "./SignUp.css";
+
+
+
+
 
 var strength = {
   0: "Anyone can guess that!",
@@ -75,7 +72,6 @@ class SignUp extends React.Component {
   };
 
   handleEmailChange = (value) => {
-    console.log(process.env.NODE_ENV);
     let isEmailProper = emailRegex.test(value);
     if (value.length < 1 || !isEmailProper) {
       if (value.length < 1) {
@@ -218,7 +214,6 @@ class SignUp extends React.Component {
       .catch((err) => {
         console.log("Error getting documents", err);
       });
-    console.log("email query", query);
     return query;
   };
 

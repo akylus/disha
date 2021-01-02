@@ -1,24 +1,18 @@
-import React, { Component } from "react";
-import { Typography, Divider, CircularProgress } from "@material-ui/core";
-import { Container, Row } from "react-bootstrap";
-import Post from "../Post";
-import {database} from '../../firebase/firebase.utils';
-
-
+import { CircularProgress } from "@material-ui/core";
 import Box from '@material-ui/core/Box';
-import SortIcon from '@material-ui/icons/Sort';
 import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-import postData from './postsdata.json';
+import SortIcon from '@material-ui/icons/Sort';
+import React, { Component } from "react";
+import { database } from '../../firebase/firebase.utils';
+import Post from "../Post";
 
 let posts = [];
-
 
 export class UserPosts extends Component {
 
   state = {
-    items: postData.slice(0,5),
     hasMore: true,
     index: 5,
     filterClicked: null,

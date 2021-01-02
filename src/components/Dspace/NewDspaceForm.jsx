@@ -1,35 +1,25 @@
-import React, { Component } from 'react';
 import {
-    Container,
-    Typography,
-    FormControl,
     Button,
-    OutlinedInput,
-    InputLabel,
-    Checkbox,
-    FormControlLabel,
-    FormLabel,
-    FormGroup,
-    Input,
-    InputAdornment,
-    IconButton,
-    Chip,
-    CircularProgress,
-    FormHelperText,
-    ThemeProvider,
-    Modal,
     Card,
-    CardContent,
+    CardContent, Checkbox,
+    Chip,
+    CircularProgress, Container,
     Dialog,
-    DialogTitle
+    DialogTitle, FormControl,
+    FormControlLabel,
+    FormGroup,
+    FormHelperText, FormLabel,
+    IconButton, Input,
+    InputAdornment, InputLabel, OutlinedInput, Typography
 } from '@material-ui/core';
-import { Row } from 'react-bootstrap';
+import { withStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import { Row } from 'react-bootstrap';
+import { Redirect } from 'react-router-dom';
 import { database } from '../../firebase/firebase.utils';
 import './style.css';
-import { Redirect } from 'react-router-dom';
-import { withStyles } from '@material-ui/core/styles';
-import PropTypes from 'prop-types';
 
 const dSpaceCategories = [
     "Tech",

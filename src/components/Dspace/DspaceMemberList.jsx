@@ -1,11 +1,10 @@
-import React, { Component } from "react";
-import { Typography, Divider, CircularProgress } from "@material-ui/core";
-import { Container, Row } from "react-bootstrap";
-import {database} from '../../firebase/firebase.utils';
-import { Link } from "react-router-dom";
+import { Divider } from "@material-ui/core";
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import React, { Component } from "react";
+import { Link } from "react-router-dom";
+import { database } from '../../firebase/firebase.utils';
 
 
 export class DspaceMemberList extends Component {
@@ -24,10 +23,8 @@ export class DspaceMemberList extends Component {
     .get()
         .then(doc => {
             if (!doc.exists) {
-                // console.log('No such document!');
             } else {
             //   this.setState({ userInfo: doc.data(), userDataReceived: true, joined: doc.data().dspaces.includes(dSpace.id) })
-                console.log('Document data:', doc.data());
                 this.setState({dSpace:doc.data()})
             }
             })

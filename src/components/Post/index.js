@@ -1,34 +1,31 @@
-import React, { useEffect, useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import { Container, Col, Row } from "react-bootstrap";
-import clsx from "clsx";
 import Card from "@material-ui/core/Card";
-import CardHeader from "@material-ui/core/CardHeader";
+import CardActions from "@material-ui/core/CardActions";
 //import CardMedia from "@material-ui/core/CardMedia";
 import CardContent from "@material-ui/core/CardContent";
-import CardActions from "@material-ui/core/CardActions";
+import CardHeader from "@material-ui/core/CardHeader";
 import Collapse from "@material-ui/core/Collapse";
+import { red } from "@material-ui/core/colors";
 //import Avatar from "@material-ui/core/Avatar";
 import IconButton from "@material-ui/core/IconButton";
+import { makeStyles } from "@material-ui/core/styles";
+import Tooltip from '@material-ui/core/Tooltip';
 import Typography from "@material-ui/core/Typography";
-import { red } from "@material-ui/core/colors";
-import FavoriteIcon from "@material-ui/icons/Favorite";
 import DeleteIcon from "@material-ui/icons/Delete";
+import FavoriteIcon from "@material-ui/icons/Favorite";
+import MessageIcon from '@material-ui/icons/Message';
 import ShareIcon from "@material-ui/icons/Share";
+import firebase from "firebase/app";
 import parse from "html-react-parser";
+import React, { useEffect, useState } from "react";
+import { Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { database } from "../../firebase/firebase.utils";
-import firebase from "firebase/app";
-import SharePost from "../SharePost";
 import DialogBox from "../DialogBox";
-import MessageIcon from '@material-ui/icons/Message';
-import Tooltip from '@material-ui/core/Tooltip';
-
-
+import SharePost from "../SharePost";
 //import MoreVertIcon from "@material-ui/icons/MoreVert";
-
 import "./style.css";
-import { CommentsComponent } from "../CommentsComponent";
+
+
 
 const useStyles = makeStyles((theme) => ({
   root: {

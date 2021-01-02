@@ -1,11 +1,5 @@
+import { Box, Card, CardContent, Typography } from '@material-ui/core';
 import React, { Component } from 'react';
-import { Card, CardContent, Typography, Box } from '@material-ui/core';  
-import { BrowserRouter as Router, Route } from "react-router-dom";
-import { Container, Col, Row } from "react-bootstrap";
-import { borderColor } from '@material-ui/system';
-import { Link } from 'react-router-dom';
-import Dspace from '../Dspace';
-
 import "./styles.css";
 
 export class DspaceCard extends Component { 

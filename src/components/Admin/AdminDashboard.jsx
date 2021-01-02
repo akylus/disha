@@ -50,8 +50,7 @@ export class AdminDashboard extends Component {
     database.collection('users').where('rollNumber',"==",userData.rollNumber)
     .get( )
     .then( (querySnapshot)=>{  
-      querySnapshot.forEach((doc)=>{  
-        console.log("doc received", doc);
+      querySnapshot.forEach((doc)=>{
         doc.ref.update({ 
           isAuthenticated:true
         }) 

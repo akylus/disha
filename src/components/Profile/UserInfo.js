@@ -1,13 +1,12 @@
-import React, { Component } from "react";
-import { Typography, Paper, Icon } from "@material-ui/core";
-import { Row, Container, Col } from "react-bootstrap";
-import LocationOnIcon from "@material-ui/icons/LocationOn";
-import WorkIcon from "@material-ui/icons/Work";
-import PhoneIcon from "@material-ui/icons/Phone";
-import MenuBookIcon from '@material-ui/icons/MenuBook';
+import { Typography } from "@material-ui/core";
 import DateRangeIcon from '@material-ui/icons/DateRange';
 import FingerprintIcon from '@material-ui/icons/Fingerprint';
+import LocationOnIcon from "@material-ui/icons/LocationOn";
 import MailIcon from '@material-ui/icons/Mail';
+import MenuBookIcon from '@material-ui/icons/MenuBook';
+import WorkIcon from "@material-ui/icons/Work";
+import React, { Component } from "react";
+import { Col, Container, Row } from "react-bootstrap";
 import "./style.css";
 
 export class UserInfo extends Component {

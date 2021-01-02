@@ -1,16 +1,15 @@
-import React, { Component, Fragment } from "react";
-import { Container, Col, Row } from "react-bootstrap";
-import { Redirect } from 'react-router-dom'; 
-
-import firebase from 'firebase/app';
-import 'firebase/firestore';
+import { CircularProgress, Divider, Grid, Typography } from "@material-ui/core";
 import 'firebase/auth';
-
-import { Typography, Divider, Grid, CircularProgress } from "@material-ui/core";
+import 'firebase/firestore';
+import React, { Component } from "react";
+import { Col, Container, Row } from "react-bootstrap";
+import { Redirect } from 'react-router-dom';
+import { database } from '../../firebase/firebase.utils';
+import ProfileImage from "./../Profile/ProfileImage";
 import UserInfo from "./../Profile/UserInfo";
 import UserPosts from "./../Profile/UserPosts";
-import ProfileImage from "./../Profile/ProfileImage";
-import {database} from '../../firebase/firebase.utils';
+
+
 
 
 export class OtherUser extends Component {
@@ -22,7 +21,7 @@ export class OtherUser extends Component {
   }
 
   getUserData(usersData, id) {
-    let query = usersData.where('rollNumber', '==', id).get()
+    usersData.where('rollNumber', '==', id).get()
     .then(snapshot => {
       if (snapshot.empty) {
         // console.log('No matching documents.');
@@ -40,7 +39,7 @@ export class OtherUser extends Component {
 
   getCurrentUserData = () => {
     let currentUserId = localStorage.getItem('currentUserId')
-    let query = database.collection('users').doc(currentUserId).get()
+    database.collection('users').doc(currentUserId).get()
       .then(doc => {
         if (!doc.exists) {
           console.log('No such document!');

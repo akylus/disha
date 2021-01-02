@@ -1,27 +1,18 @@
+import {
+    Button,
+    CircularProgress, FormControl,
+    FormHelperText, TextField, Typography
+} from "@material-ui/core";
+import Box from '@material-ui/core/Box';
+import Grid from '@material-ui/core/Grid';
+import firebase from 'firebase/app';
 import React, { Component } from "react";
 import { Container } from "react-bootstrap";
-import {
-    Typography,
-    FormControl,
-    TextField,
-    MenuItem,
-    FormGroup,
-    FormControlLabel,
-    FormHelperText,
-    Checkbox,
-    FormLabel,
-    Button,
-    CircularProgress
-} from "@material-ui/core";
-import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
-import { Row } from "react-bootstrap";
-import { database } from '../../firebase/firebase.utils';
-import "./style.css";
-import { Redirect } from "react-router-dom";
 import 'react-quill/dist/quill.snow.css';
-import firebase from 'firebase/app';
+import { Redirect } from "react-router-dom";
+import { database } from '../../firebase/firebase.utils';
 import LocationSearch from './LocationSearch';
+import "./style.css";
 
 
 let posts = []
@@ -46,7 +37,6 @@ export default class EditProfile extends Component {
             isCurrentPasswordValid: true,
             isNewPasswordValid: true,
             isConfirmPasswordValid: true,
-            isConfirmPasswordValid: true,
             cities: []
         }
 
@@ -68,7 +58,6 @@ export default class EditProfile extends Component {
         this.setState({
             [event.target.id]: event.target.value
         })
-        console.log(this.state)
     }
 
     handleFirstNameChange = (event) => {

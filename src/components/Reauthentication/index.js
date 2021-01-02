@@ -1,28 +1,14 @@
-import React, { Component } from "react";
-import { Container } from "react-bootstrap";
 import {
-    Typography,
-    FormControl,
-    TextField,
-    MenuItem,
-    FormGroup,
-    FormControlLabel,
-    FormHelperText,
-    Checkbox,
-    FormLabel,
     Button,
-    CircularProgress
+    CircularProgress, FormControl,
+    FormHelperText, TextField, Typography
 } from "@material-ui/core";
 import Grid from '@material-ui/core/Grid';
-import { Redirect } from "react-router-dom";
 import firebase from 'firebase/app';
-
-import { database, auth } from '../../firebase/firebase.utils';
-
+import React, { Component } from "react";
+import { Container } from "react-bootstrap";
+import { Redirect } from "react-router-dom";
 import "./style.css";
-
-
-
 
 export default class Reauthentication extends Component {
 

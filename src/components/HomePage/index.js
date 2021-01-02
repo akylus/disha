@@ -42,12 +42,10 @@ export default class HomePage extends React.Component {
     componentDidMount() {
         this.getUserData();
         this.getPosts();
-        console.log(this.state.allPosts)
     }
 
     componentWillUnmount() {
         this.setState({allPosts: null});
-        console.log(this.state.allPosts)
         posts = []
     }
 
@@ -60,8 +58,7 @@ export default class HomePage extends React.Component {
         else {
             let currentUserId = localStorage.getItem('currentUserId')
             let userData = database.collection('users').doc(currentUserId);
-            var a;
-            a = userData.get()
+            userData.get()
                 .then(doc => {
                     if (!doc.exists) {
                         console.log('No such document!');
@@ -82,7 +79,7 @@ export default class HomePage extends React.Component {
 
     getUserDspaces = (userInfo) => {
         let postsData = database.collection('d-spaces')
-        let query = postsData.get()
+        postsData.get()
             .then(snapshot => {
                 if (snapshot.empty) {
                     console.log('No matching documents.');
@@ -98,7 +95,6 @@ export default class HomePage extends React.Component {
                 });
                 // let dspaceInfo = snapshot.data()
                 this.setState({ userDspaces: a, userDspacesArrived: true })
-                console.log(this.state.userDspaces)
             })
     }
 
@@ -108,12 +104,12 @@ export default class HomePage extends React.Component {
         let index = arr.indexOf(post)
         arr.splice(index, 1)
         this.setState({ allPosts: arr });
-        let deleteDoc = database.collection('posts').doc(post.id).delete();
+        database.collection('posts').doc(post.id).delete();
     }
 
     getPosts = () => {
         let postsData = database.collection('posts')
-        let query = postsData.get()
+        postsData.get()
             .then(snapshot => {
                 if (snapshot.empty) {
                     console.log('No matching documents.');
@@ -126,6 +122,7 @@ export default class HomePage extends React.Component {
                     a.userLiked = this.state.userInfo.likedPosts.includes(doc.id)
                     posts.push(a)
                 });
+                // improve sorting
                 posts = this.sortPosts(posts)
                 this.setState({ postsArrived: true, allPosts: posts })
                 posts = [];
@@ -154,7 +151,6 @@ export default class HomePage extends React.Component {
             post.score = 0
             posts[index] = post
         })
-        console.log(posts)
         return posts
     }
 
@@ -198,7 +194,7 @@ export default class HomePage extends React.Component {
                     post={post}
                     key={post.id}
                     userLiked={this.state.userInfo.likedPosts.includes(post.id)}
-                    postedByUser={this.state.userInfo.rollNumber == post.authorRollNumber}
+                    postedByUser={this.state.userInfo.rollNumber === post.authorRollNumber}
                     removePost={this.removePost}
                     inIndividualPost={false}
                 />
@@ -211,7 +207,7 @@ export default class HomePage extends React.Component {
                         post={post}
                         key={post.id}
                         userLiked={this.state.userInfo.likedPosts.includes(post.id)}
-                        postedByUser={this.state.userInfo.rollNumber == post.authorRollNumber}
+                        postedByUser={this.state.userInfo.rollNumber === post.authorRollNumber}
                         removePost={this.removePost}
                         inIndividualPost={false}
                     />

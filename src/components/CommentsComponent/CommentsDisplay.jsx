@@ -1,6 +1,5 @@
-import React, { Component, Fragment } from 'react'
-import { Typography, Link, Divider } from '@material-ui/core'; 
-import { database } from '../../firebase/firebase.utils';
+import { Link, Typography } from '@material-ui/core';
+import React, { Component } from 'react';
 
 export class CommentsDisplay extends Component {  
     initialComments = [];

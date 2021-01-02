@@ -24,10 +24,6 @@ const Styles = makeStyles((theme) => ({
     color: theme.palette.getContrastText(deepOrange[500]),
     backgroundColor: deepOrange[500],
   },
-  purple: {
-    color: "#ffffff",
-    backgroundColor: "#F9A825",
-  },
 }));
 
 const getInitials = (fullName) => {
@@ -80,7 +76,10 @@ export default function UserCard(props) {
               justify="space-between"
               alignItems="center"
             >
-              <Avatar className={classes.purple}>
+              <Avatar
+                style={{ color: "#ffffff", backgroundColor: "#F9A825" }}
+                className={classes.large}
+              >
                 {getInitials(props.title)}
               </Avatar>
               <Box style={{ width: "70%" }}>

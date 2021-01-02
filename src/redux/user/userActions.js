@@ -2,6 +2,7 @@ import {
   FETCH_USERS_REQUEST,
   FETCH_USERS_SUCCESS,
   FETCH_USERS_FAILURE,
+  SET_USER,
 } from "./userTypes";
 import { database } from "../../firebase/firebase.utils";
 import { COLLECTION } from "../../shared/constants";
@@ -53,8 +54,7 @@ export const fetchUsers = () => {
   };
 };
 
-//old
 export const setUser = (user) => ({
-  type: "SET_USER",
+  type: SET_USER,
   payload: user,
 });

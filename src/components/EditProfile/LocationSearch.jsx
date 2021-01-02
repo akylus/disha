@@ -1,8 +1,8 @@
 /* eslint-disable no-use-before-define */
-import React, { useEffect, useState } from "react";
+import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
-import { makeStyles } from '@material-ui/core/styles';
+import React from "react";
 
 function countryToFlag(isoCode) {
     return typeof String.fromCodePoint !== 'undefined'

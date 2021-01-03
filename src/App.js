@@ -18,7 +18,7 @@ export class App extends Component {
 
   unsubscribeFromAuth = null;
 
-  setUserId() {
+  setUser() {
     localStorage.setItem("currentUserId", this.state.currentUser.id);
     this.props.setUser(this.state.currentUser);
     let domain = this.state.currentUser.email.split("@")[1].toLowerCase();
@@ -32,30 +32,7 @@ export class App extends Component {
   componentDidMount() {
     this.unsubscribeFromAuth = auth.onAuthStateChanged(async (userAuth) => {
       if (userAuth) {
-        let userRef = await createUserProfileDocument(userAuth);
-
-        userRef.onSnapshot((snapShot) => {
-          this.setState(
-            {
-              currentUser: {
-                id: snapShot.id,
-                ...snapShot.data(),
-              },
-            },
-            () => {
-              this.state.currentUser
-                ? this.setUserId()
-                : this.props.setUser(null);
-            }
-          );
-        });
-        // }
-        // else if(this.props.isNewUser === true){
-        // userRef = null;
-        // this.setState({ currentUser: null }, () => {
-        //   this.props.setUser(null)
-        // })
-        // }
+        await this.setCurrentUser(userAuth);
       } else {
         this.setState({ currentUser: userAuth }, () => {
           this.props.setUser(null);
@@ -72,6 +49,26 @@ export class App extends Component {
     this.setState({ currentUser: null });
     this.props.setUser(null);
     localStorage.removeItem("currentUserId");
+  }
+
+  async setCurrentUser(userAuth) {
+    let userRef = await createUserProfileDocument(userAuth);
+    userRef.onSnapshot((snapShot) => {
+      debugger;
+      this.setState(
+        {
+          currentUser: {
+            id: snapShot.id,
+            ...snapShot.data(),
+          },
+        },
+        () => {
+          this.state.currentUser
+            ? this.setUser()
+            : this.props.setUser(null);
+        }
+      );
+    });
   }
 
   render() {

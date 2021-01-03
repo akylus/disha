@@ -1,8 +1,8 @@
-import { database } from "./firebase/firebase.utils";
+import { database, createUserProfileDocument } from "./firebase/firebase.utils";
 import { COLLECTION } from "./shared/constants";
 
 export const fetchUsers = async () => {
-    let error = {};
+  let error = "";
   let allUsers = await database
     .collection(COLLECTION.USERS)
     .get()
@@ -21,8 +21,8 @@ export const fetchUsers = async () => {
     })
     .catch((err) => {
       console.log("Error getting documents", err);
-      let error = err;
+      let error = err.message;
       return [];
     });
-    return {users: allUsers, error: error}
+  return { users: allUsers, error: error };
 };

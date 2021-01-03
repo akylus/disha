@@ -90,7 +90,6 @@ export class UserCards extends Component {
 
   async componentDidMount() {
     let data;
-    console.log("saaaaa", this.props.user)
     if (users.length < 1) {
       data = await fetchUsers();
       if (data.users) {
@@ -117,7 +116,6 @@ export class UserCards extends Component {
   }
 
   updateUsers(prevProps) {
-    debugger;
     if (prevProps.searchValue !== this.props.searchValue) {
       users = updateUsersArray(this.props.searchValue, this.props.filterValues);
       searchUsers = users;

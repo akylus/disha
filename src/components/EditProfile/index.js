@@ -14,8 +14,7 @@ import { database } from '../../firebase/firebase.utils';
 import LocationSearch from './LocationSearch';
 import "./style.css";
 
-
-let posts = []
+let posts = [];
 export default class EditProfile extends Component {
 
     constructor(props) {
@@ -40,17 +39,14 @@ export default class EditProfile extends Component {
             cities: []
         }
 
-    }
+  componentDidMount() {
+    this.getUserDetails();
+    this.getCities();
+  }
 
-
-    componentDidMount() {
-        this.getUserDetails();
-        this.getCities();
-    }
-
-    componentWillUnmount() {
-        posts = [];
-    }
+  componentWillUnmount() {
+    posts = [];
+  }
 
     
 
@@ -60,305 +56,333 @@ export default class EditProfile extends Component {
         })
     }
 
-    handleFirstNameChange = (event) => {
-        this.setState({ firstName: event.target.value })
+  handleFirstNameChange = (event) => {
+    this.setState({ firstName: event.target.value });
+  };
+  handleLastNameChange = (event) => {
+    this.setState({ lastName: event.target.value });
+  };
+  handleNewPasswordChange = (event) => {
+    if (event.target.value.length < 8) {
+      this.setState({ isNewPasswordValid: false });
+    } else {
+      this.setState({ isNewPasswordValid: true });
     }
-    handleLastNameChange = (event) => {
-        this.setState({ lastName: event.target.value })
+    if (
+      this.state.confirmPassword &&
+      event.target.value !== this.state.confirmPassword
+    ) {
+      this.setState({ isConfirmPasswordValid: false });
+    } else {
+      this.setState({ isConfirmPasswordValid: true });
     }
-    handleNewPasswordChange = (event) => {
-        if (event.target.value.length < 8) {
-            this.setState({ isNewPasswordValid: false })
+    this.setState({ newPassword: event.target.value });
+  };
+  handleConfirmPasswordChange = (event) => {
+    if (event.target.value !== this.state.newPassword) {
+      this.setState({ isConfirmPasswordValid: false });
+    } else {
+      this.setState({ isConfirmPasswordValid: true });
+    }
+    this.setState({ confirmPassword: event.target.value });
+  };
+
+  isNameChanged = () => {
+    if (
+      this.state.firstName === this.state.currentUserInfo.firstName &&
+      this.state.lastName === this.state.currentUserInfo.lastName
+    ) {
+      return false;
+    } else return true;
+  };
+
+  isOtherDetailsChanged = () => {
+    if (
+      this.state.location === this.state.currentUserInfo.location &&
+      this.state.company === this.state.currentUserInfo.company
+    ) {
+      return false;
+    } else return true;
+  };
+
+  updatePostData = () => {
+    this.state.allPosts.forEach((post) => {
+      if (post.authorRollNumber === this.state.currentUserInfo.rollNumber) {
+        database
+          .collection("posts")
+          .doc(post.id)
+          .update({
+            author: this.state.firstName + " " + this.state.lastName,
+          });
+      }
+    });
+  };
+
+  updateUserDetails = () => {
+    if (!this.state.firstName || !this.state.lastName) return;
+    let currentUserId = localStorage.getItem("currentUserId");
+    let userData = this.state.currentUserInfo;
+    userData.firstName = this.state.firstName;
+    userData.lastName = this.state.lastName;
+    if (this.state.location) userData.location = this.state.location;
+    if (this.state.company) userData.company = this.state.company;
+    localStorage.setItem("currentUserInfo", JSON.stringify(userData));
+    database.collection("users").doc(currentUserId).update({
+      firstName: this.state.firstName,
+      lastName: this.state.lastName,
+      location: userData.location,
+      company: userData.company,
+    });
+    this.setState({ detailsUpdatedSuccessfully: true });
+  };
+
+  handleDetailsSubmit = () => {
+    debugger;
+    if (this.isNameChanged()) {
+      this.setState({ postsUpdated: false });
+      this.updatePostData();
+    }
+    if (this.isNameChanged() || this.isOtherDetailsChanged()) {
+      this.updateUserDetails();
+      this.setState({
+        onDataSubmitting: true,
+      });
+    }
+  };
+
+  handlePasswordSubmit = () => {
+    if (this.state.isNewPasswordValid && this.state.isConfirmPasswordValid) {
+      let result;
+      let user = firebase.auth().currentUser;
+      try {
+        result = user.updatePassword(this.state.newPassword);
+      } catch (error) {
+        if (error.code === "auth/user-not-found")
+          this.setState({
+            errorMessage: "Incorrect Password. Please check!",
+            isSignin: false,
+          });
+        else if (error.code === "auth/wrong-password")
+          this.setState({
+            errorMessage: "Incorrect Password. Please check!",
+            isSignin: false,
+          });
+        console.error(error);
+      } finally {
+        if (result) {
+          this.setState({ detailsUpdatedSuccessfully: true });
         }
-        else {
-            this.setState({ isNewPasswordValid: true })
-        }
-        if (this.state.confirmPassword && event.target.value !== this.state.confirmPassword) {
-            this.setState({ isConfirmPasswordValid: false })
-        }
-        else {
-            this.setState({ isConfirmPasswordValid: true })
-        }
-        this.setState({ newPassword: event.target.value })
+      }
     }
-    handleConfirmPasswordChange = (event) => {
-        if (event.target.value !== this.state.newPassword) {
-            this.setState({ isConfirmPasswordValid: false })
-        }
-        else {
-            this.setState({ isConfirmPasswordValid: true })
-        }
-        this.setState({ confirmPassword: event.target.value })
-    }
+  };
 
-    isNameChanged = () => {
-        if (this.state.firstName === this.state.currentUserInfo.firstName && this.state.lastName === this.state.currentUserInfo.lastName) {
-            return false
-        }
-        else return true
-    }
+  getUserDetails = () => {
+    let currentUserInfo = localStorage.getItem("currentUserInfo");
+    let userData = JSON.parse(currentUserInfo);
+    this.setState({
+      currentUserInfo: userData,
+      userDataReceived: true,
+      firstName: userData.firstName,
+      lastName: userData.lastName,
+      company: userData.company,
+      location: userData.location,
+    });
+  };
 
-    isOtherDetailsChanged = () => {
-        if (this.state.location === this.state.currentUserInfo.location && this.state.company === this.state.currentUserInfo.company) {
-            return false
-        }
-        else return true
-    }
+  getCities = () => {
+    let c;
+    var proxyUrl = "https://cors-anywhere.herokuapp.com/",
+      targetUrl =
+        "https://pkgstore.datahub.io/core/world-cities/world-cities_json/data/5b3dd46ad10990bca47b04b4739a02ba/world-cities_json.json";
+    c = fetch(proxyUrl + targetUrl)
+      .then((blob) => blob.json())
+      .then((data) => {
+        console.log(data);
+        this.setState({ cities: data });
+        return data;
+      })
+      .catch((e) => {
+        console.log(e);
+        return e;
+      });
+    console.log(c);
+    // setCities(c)
+  };
 
-    updatePostData = () => {
-        this.state.allPosts.forEach(post => {
-            if (post.authorRollNumber === this.state.currentUserInfo.rollNumber) {
-                database.collection("posts").doc(post.id).update({
-                    author: this.state.firstName + " " + this.state.lastName
-                });
-            }
-        })
-    }
+  handleTabSwitch = () => {
+    this.setState({
+      isPasswordTab: !this.state.isPasswordTab,
+      currentPassword: null,
+      firstName: null,
+    });
+  };
 
-    updateUserDetails = () => {
-        if (!this.state.firstName || !this.state.lastName) return;
-        let currentUserId = localStorage.getItem("currentUserId");
-        let userData = this.state.currentUserInfo
-        userData.firstName = this.state.firstName
-        userData.lastName = this.state.lastName
-        if (this.state.location)
-            userData.location = this.state.location
-        if (this.state.company)
-            userData.company = this.state.company
-        localStorage.setItem("currentUserInfo", JSON.stringify(userData))
-        database.collection("users").doc(currentUserId).update({
-            firstName: this.state.firstName,
-            lastName: this.state.lastName,
-            location: userData.location,
-            company: userData.company,
-        });
-        this.setState({ detailsUpdatedSuccessfully: true });
-    }
+  handleCompanyChange = (event) => {
+    this.state.company = event.target.value;
+  };
 
+  handleSearchChange = (value) => {
+    this.state.location = value;
+  };
 
-    handleDetailsSubmit = () => {
-        debugger;
-        if (this.isNameChanged()) {
-            this.setState({ postsUpdated: false })
-            this.updatePostData();
-        }
-        if (this.isNameChanged() || this.isOtherDetailsChanged()) {
-            this.updateUserDetails();
-            this.setState({
-                onDataSubmitting: true
-            })
-        }
-    }
-
-    handlePasswordSubmit = () => {
-        if (this.state.isNewPasswordValid && this.state.isConfirmPasswordValid) {
-            let result;
-            let user = firebase.auth().currentUser;
-            try {
-                result = user.updatePassword(this.state.newPassword)
-            } catch (error) {
-                if (error.code === "auth/user-not-found")
-                    this.setState({ errorMessage: "Incorrect Password. Please check!", isSignin: false })
-                else if (error.code === "auth/wrong-password")
-                    this.setState({ errorMessage: "Incorrect Password. Please check!", isSignin: false })
-                console.error(error)
-            }
-            finally {
-                if (result) {
-                    this.setState({ detailsUpdatedSuccessfully: true })
-                }
-            }
-        }
-    }
-
-    getUserDetails = () => {
-        let currentUserInfo = localStorage.getItem('currentUserInfo');
-        let userData = JSON.parse(currentUserInfo);
-        this.setState({
-            currentUserInfo: userData,
-            userDataReceived: true,
-            firstName: userData.firstName,
-            lastName: userData.lastName,
-            company: userData.company,
-            location: userData.location,
-        })
-    }
-
-    getCities = () => {
-        let c;
-        var proxyUrl = 'https://cors-anywhere.herokuapp.com/',
-            targetUrl = 'https://pkgstore.datahub.io/core/world-cities/world-cities_json/data/5b3dd46ad10990bca47b04b4739a02ba/world-cities_json.json'
-        c = fetch(proxyUrl + targetUrl)
-            .then(blob => blob.json())
-            .then(data => {
-                console.log(data)
-                this.setState({cities: data})
-                return data;
-            })
-            .catch(e => {
-                console.log(e);
-                return e;
-            });
-        console.log(c)
-        // setCities(c)
-    }
-
-    handleTabSwitch = () => {
-        this.setState({ isPasswordTab: !this.state.isPasswordTab, currentPassword: null, firstName: null })
-    }
-
-    handleCompanyChange = (event) => {
-        this.state.company = event.target.value
-    }
-
-    handleSearchChange = (value) => {
-        this.state.location = value
-    }
-
-
-    render() {
-        // console.log(this.state);
-        if (this.state.detailsUpdatedSuccessfully) {
-            return (<Redirect to={{ pathname: "/data-updated", state: { message: "Details Updated Successfully" } }} />);
-        }
-        else if (!this.props.location.state) {
-            return (<Redirect to={{ pathname: "/" }} />);
-        }
-        else if (this.state.userDataReceived === false || this.state.cities.length < 1) {
-            return (
-                <div style={{
-                    position: 'absolute', left: '50%', top: '50%',
-                    transform: 'translate(-50%, -50%)'
-                }}
+  render() {
+    // console.log(this.state);
+    if (this.state.detailsUpdatedSuccessfully) {
+      return (
+        <Redirect
+          to={{
+            pathname: "/data-updated",
+            state: { message: "Details Updated Successfully" },
+          }}
+        />
+      );
+    } else if (!this.props.location.state) {
+      return <Redirect to={{ pathname: "/" }} />;
+    } else if (
+      this.state.userDataReceived === false ||
+      this.state.cities.length < 1
+    ) {
+      return (
+        <div
+          style={{
+            position: "absolute",
+            left: "50%",
+            top: "50%",
+            transform: "translate(-50%, -50%)",
+          }}
+        >
+          <CircularProgress size={80} />
+        </div>
+      );
+    } else {
+      return (
+        <Container component="main" maxWidth="xs">
+          <Typography variant="h1">Edit Profile</Typography>
+          <Grid container>
+            <Grid item xs={12} sm={6}>
+              <FormControl fullWidth>
+                <TextField
+                  label="First Name"
+                  id="firstName"
+                  defaultValue={this.state.currentUserInfo.firstName}
+                  placeholder={this.state.currentUserInfo.firstName}
+                  variant="outlined"
+                  required
+                  onChange={this.handleFirstNameChange}
+                  error={this.state.isFirstNameInvalid}
+                />
+              </FormControl>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <FormControl fullWidth>
+                <TextField
+                  label="Last Name"
+                  id="lastName"
+                  defaultValue={this.state.currentUserInfo.lastName}
+                  placeholder={this.state.currentUserInfo.lastName}
+                  variant="outlined"
+                  required
+                  onChange={this.handleLastNameChange}
+                  error={this.state.isLastNameInvalid}
+                />
+              </FormControl>
+            </Grid>
+          </Grid>
+          <Grid container>
+            <Grid item xs={12} sm={6}>
+              <LocationSearch
+                defaultCity={this.state.currentUserInfo.location}
+                cities={this.state.cities}
+                handleSearchChange={this.handleSearchChange}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <FormControl fullWidth>
+                <TextField
+                  label="Company"
+                  id="company"
+                  defaultValue={this.state.currentUserInfo.company || ""}
+                  placeholder={this.state.currentUserInfo.company || ""}
+                  variant="outlined"
+                  onChange={this.handleCompanyChange}
+                  error={this.state.isCompanyInvalid}
+                />
+              </FormControl>
+            </Grid>
+          </Grid>
+          <Grid container direction="row" justify="center">
+            <Button
+              type="submit"
+              variant="contained"
+              color="secondary"
+              className="button"
+              size="large"
+              onClick={this.handleDetailsSubmit}
+            >
+              <div id="textColor">Save Changes</div>
+            </Button>
+          </Grid>
+          <br />
+          <Box justifyContent="center">
+            <form className="form" noValidate>
+              <Grid container>
+                <Grid item xs={12} sm={6}>
+                  <FormControl fullWidth>
+                    <TextField
+                      label="New Password"
+                      id="NewPassword"
+                      placeholder="New Password"
+                      variant="outlined"
+                      required
+                      type="password"
+                      onChange={this.handleNewPasswordChange}
+                      error={!this.state.isNewPasswordValid}
+                    />
+                  </FormControl>
+                  {!this.state.isNewPasswordValid && (
+                    <FormHelperText error={true}>
+                      * Password too short!
+                    </FormHelperText>
+                  )}
+                </Grid>
+              </Grid>
+              <Grid container>
+                <Grid item xs={12} sm={6}>
+                  <FormControl fullWidth>
+                    <TextField
+                      label="Confirm Password"
+                      id="ConfirmPassword"
+                      placeholder="Confirm Password"
+                      variant="outlined"
+                      required
+                      type="password"
+                      onChange={this.handleConfirmPasswordChange}
+                      error={!this.state.isConfirmPasswordValid}
+                    />
+                  </FormControl>
+                  {!this.state.isConfirmPasswordValid && (
+                    <FormHelperText error={true}>
+                      Passwords do not match!
+                    </FormHelperText>
+                  )}
+                </Grid>
+              </Grid>
+              <Grid container direction="row" justify="center">
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="secondary"
+                  className="button"
+                  size="medium"
+                  onClick={this.handlePasswordSubmit}
                 >
-                    <CircularProgress size={80} />
-                </div>
-            )
-        }
-        else {
-            return (
-                <Container component="main" maxWidth="xs">
-                    <Typography variant="h1">Edit Profile</Typography>
-                    <Grid container>
-                        <Grid item xs={12} sm={6}>
-                            <FormControl fullWidth>
-                                <TextField
-                                    label="First Name"
-                                    id="firstName"
-                                    defaultValue={this.state.currentUserInfo.firstName}
-                                    placeholder={this.state.currentUserInfo.firstName}
-                                    variant="outlined"
-                                    required
-                                    onChange={this.handleFirstNameChange}
-                                    error={this.state.isFirstNameInvalid}
-                                />
-                            </FormControl>
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <FormControl fullWidth>
-                                <TextField
-                                    label="Last Name"
-                                    id="lastName"
-                                    defaultValue={this.state.currentUserInfo.lastName}
-                                    placeholder={this.state.currentUserInfo.lastName}
-                                    variant="outlined"
-                                    required
-                                    onChange={this.handleLastNameChange}
-                                    error={this.state.isLastNameInvalid}
-                                />
-                            </FormControl>
-                        </Grid>
-                    </Grid>
-                    <Grid container>
-                        <Grid item xs={12} sm={6}>
-                            <LocationSearch defaultCity={this.state.currentUserInfo.location} cities={this.state.cities} handleSearchChange={this.handleSearchChange}/>
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <FormControl fullWidth>
-                                <TextField
-                                    label="Company"
-                                    id="company"
-                                    defaultValue={this.state.currentUserInfo.company || ""}
-                                    placeholder={this.state.currentUserInfo.company || ""}
-                                    variant="outlined"
-                                    onChange={this.handleCompanyChange}
-                                    error={this.state.isCompanyInvalid}
-                                />
-                            </FormControl>
-                        </Grid>
-                    </Grid>
-                    <Grid container direction="row" justify="center">
-                        <Button
-                            type="submit"
-                            variant="contained"
-                            color="secondary"
-                            className="button"
-                            size="large"
-                            onClick={this.handleDetailsSubmit}
-                        >
-                            <div id="textColor" >Save Changes</div>
-                        </Button>
-                    </Grid>
-                    <br />
-                    <Box justifyContent="center">
-
-                        <form className="form" noValidate>
-
-                            <Grid container>
-                                <Grid item xs={12} sm={6}>
-                                    <FormControl fullWidth>
-                                        <TextField
-                                            label="New Password"
-                                            id="NewPassword"
-                                            placeholder="New Password"
-                                            variant="outlined"
-                                            required
-                                            type="password"
-                                            onChange={this.handleNewPasswordChange}
-                                            error={!this.state.isNewPasswordValid}
-                                        />
-                                    </FormControl>
-                                    {!this.state.isNewPasswordValid &&
-                                        <FormHelperText error={true}>* Password too short!</FormHelperText>
-                                    }
-                                </Grid>
-                            </Grid>
-                            <Grid container>
-                                <Grid item xs={12} sm={6}>
-                                    <FormControl fullWidth>
-                                        <TextField
-                                            label="Confirm Password"
-                                            id="ConfirmPassword"
-                                            placeholder="Confirm Password"
-                                            variant="outlined"
-                                            required
-                                            type="password"
-                                            onChange={this.handleConfirmPasswordChange}
-                                            error={!this.state.isConfirmPasswordValid}
-                                        />
-                                    </FormControl>
-                                    {!this.state.isConfirmPasswordValid &&
-                                        <FormHelperText error={true}>Passwords do not match!</FormHelperText>
-                                    }
-                                </Grid>
-                            </Grid>
-                            <Grid container direction="row" justify="center">
-                                <Button
-                                    type="submit"
-                                    variant="contained"
-                                    color="secondary"
-                                    className="button"
-                                    size="medium"
-                                    onClick={this.handlePasswordSubmit}
-                                >
-                                    <div id="textColor" >Change Password</div>
-                                </Button>
-                            </Grid>
-                        </form>
-                    </Box>
-                </Container>
-            );
-        }
-
+                  <div id="textColor">Change Password</div>
+                </Button>
+              </Grid>
+            </form>
+          </Box>
+        </Container>
+      );
     }
+  }
 }

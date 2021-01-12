@@ -18,7 +18,6 @@ export const POST_CATEGORIES = {
   INTERNSHIP: "Internship",
   EVENTS: "Events",
   OTHER: "Other",
-  NONE: "None",
 };
 
 export const ROLL_NUMBER_CONFIG = {

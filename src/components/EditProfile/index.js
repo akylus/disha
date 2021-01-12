@@ -1,44 +1,46 @@
 import {
-    Button,
-    CircularProgress, FormControl,
-    FormHelperText, TextField, Typography
+  Button,
+  CircularProgress,
+  FormControl,
+  FormHelperText,
+  TextField,
+  Typography,
 } from "@material-ui/core";
-import Box from '@material-ui/core/Box';
-import Grid from '@material-ui/core/Grid';
-import firebase from 'firebase/app';
+import Box from "@material-ui/core/Box";
+import Grid from "@material-ui/core/Grid";
+import firebase from "firebase/app";
 import React, { Component } from "react";
 import { Container } from "react-bootstrap";
-import 'react-quill/dist/quill.snow.css';
+import "react-quill/dist/quill.snow.css";
 import { Redirect } from "react-router-dom";
-import { database } from '../../firebase/firebase.utils';
-import LocationSearch from './LocationSearch';
+import { database } from "../../firebase/firebase.utils";
+import LocationSearch from "./LocationSearch";
 import "./style.css";
 
 let posts = [];
 export default class EditProfile extends Component {
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            firstName: null,
-            lastName: null,
-            location: "",
-            company: "",
-            currentPassword: null,
-            newPassword: null,
-            confirmPassword: null,
-            onDataSubmitting: false,
-            detailsUpdatedSuccessfully: false,
-            currentUserInfo: null,
-            userDataReceived: false,
-            postsUpdated: false,
-            isPasswordTab: false,
-            isCurrentPasswordValid: true,
-            isNewPasswordValid: true,
-            isConfirmPasswordValid: true,
-            cities: []
-        }
-
+  constructor(props) {
+    super(props);
+    this.state = {
+      firstName: null,
+      lastName: null,
+      location: "",
+      company: "",
+      currentPassword: null,
+      newPassword: null,
+      confirmPassword: null,
+      onDataSubmitting: false,
+      detailsUpdatedSuccessfully: false,
+      currentUserInfo: null,
+      userDataReceived: false,
+      postsUpdated: false,
+      isPasswordTab: false,
+      isCurrentPasswordValid: true,
+      isNewPasswordValid: true,
+      isConfirmPasswordValid: true,
+      cities: [],
+    };
+  }
   componentDidMount() {
     this.getUserDetails();
     this.getCities();
@@ -48,13 +50,11 @@ export default class EditProfile extends Component {
     posts = [];
   }
 
-    
-
-    handleTextChange = (event) => {
-        this.setState({
-            [event.target.id]: event.target.value
-        })
-    }
+  handleTextChange = (event) => {
+    this.setState({
+      [event.target.id]: event.target.value,
+    });
+  };
 
   handleFirstNameChange = (event) => {
     this.setState({ firstName: event.target.value });

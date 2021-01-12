@@ -3,7 +3,7 @@ import {
   FETCH_USERS_SUCCESS,
   FETCH_USERS_FAILURE,
   SET_USER,
-} from "./userTypes";
+} from "./user-types";
 
 const INITIAL_STATE = {
   users: [],

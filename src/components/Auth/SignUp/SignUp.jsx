@@ -1,10 +1,10 @@
 import {
   FormControl,
-
-
-
-  FormHelperText, InputLabel, OutlinedInput
+  FormHelperText,
+  InputLabel,
+  OutlinedInput,
 } from "@material-ui/core";
+import React, { Component } from "react";
 import Button from "@material-ui/core/Button";
 import Checkbox from "@material-ui/core/Checkbox";
 import Container from "@material-ui/core/Container";
@@ -21,17 +21,15 @@ import { Redirect } from "react-router-dom";
 import zxcvbn from "zxcvbn";
 import {
   auth,
-  createUserProfileDocument, database
+  createUserProfileDocument,
+  database,
 } from "../../../firebase/firebase.utils";
 import {
-  DEPARTMENT_CODES, ROLL_NUMBER_CONFIG
+  DEPARTMENT_CODES,
+  ROLL_NUMBER_CONFIG,
 } from "../../../shared/constants";
 import Logo from "../../Logo/Logo";
 import "./SignUp.css";
-
-
-
-
 
 var emailRegex = EMAIL_REGEX;
 let mbaCode = "1e";
@@ -96,9 +94,9 @@ class SignUp extends React.Component {
     if (value.length > 7) {
       let deptCode = value.substring(6, 8);
       let studentType = value.substring(4, 6);
-      if(studentType === mbaCode) {
+      if (studentType === mbaCode) {
         this.setState({ department: "MBA" });
-        department = "MBA"
+        department = "MBA";
         return department;
       }
       department = departments[deptCode];
@@ -240,9 +238,12 @@ class SignUp extends React.Component {
     }
     if (branch.indexOf(rollNumber.substring(6, 8)) === -1) {
       return false;
-    }
-    else {
-      if(rollNumber.substring(6, 8) === "00" && rollNumber.substring(4, 6) !== mbaCode) return false;
+    } else {
+      if (
+        rollNumber.substring(6, 8) === "00" &&
+        rollNumber.substring(4, 6) !== mbaCode
+      )
+        return false;
     }
     return true;
   }

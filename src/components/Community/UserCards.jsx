@@ -7,7 +7,7 @@ import { FILTER_TYPES } from "../../shared/constants";
 import "../SearchPage/styles.css";
 import UserCard from "./UserCard";
 import { connect } from "react-redux";
-
+import ErrorMessage from "../../shared/ErrorMessage"
 let users = [];
 
 let searchUsers = [];
@@ -161,16 +161,7 @@ export class UserCards extends Component {
         </Row>
       </Container>
     ) : this.state.error ? (
-      <Container>
-        <Row>
-          <Col md={{ span: 6, offset: 3 }}>
-            <Typography variant="h4">Error!</Typography>
-            <Typography variant="h6">
-              {this.props.usersData.usersError}
-            </Typography>
-          </Col>
-        </Row>
-      </Container>
+      <ErrorMessage error={this.state.error}/>
     ) : (
       <Container>
         <Row className="d-space-cards-display-row">
